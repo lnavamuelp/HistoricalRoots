@@ -3,11 +3,11 @@ package com.jodhpurtechies.composelogin.ui.theme
 import androidx.compose.ui.graphics.Color
 
 // Light Theme Colors
-val md_theme_light_primary = Color(0xFF00639A)
-val md_theme_light_onPrimary = Color(0xFFFFFFFF)
+val md_theme_light_primary = Color(0xFF1dc391)
+val md_theme_light_onPrimary = Color(0xFF000000)
 val md_theme_light_primaryContainer = Color(0xFFCEE5FF)
 val md_theme_light_onPrimaryContainer = Color(0xFF001D32)
-val md_theme_light_secondary = Color(0xFF006D3B)
+val md_theme_light_secondary = Color(0xFFf8ca41)
 val md_theme_light_onSecondary = Color(0xFFFFFFFF)
 val md_theme_light_secondaryContainer = Color(0xFF66FEA2)
 val md_theme_light_onSecondaryContainer = Color(0xFF00210E)
@@ -35,11 +35,11 @@ val md_theme_light_outlineVariant = Color(0xFFC2C7CF)
 val md_theme_light_scrim = Color(0xFF000000)
 
 // Dark Theme Colors
-val md_theme_dark_primary = Color(0xFF96CCFF)
+val md_theme_dark_primary = Color(0xFF009163)
 val md_theme_dark_onPrimary = Color(0xFF003353)
 val md_theme_dark_primaryContainer = Color(0xFF004A76)
 val md_theme_dark_onPrimaryContainer = Color(0xFFCEE5FF)
-val md_theme_dark_secondary = Color(0xFF43E188)
+val md_theme_dark_secondary = Color(0xFFc19a00)
 val md_theme_dark_onSecondary = Color(0xFF00391C)
 val md_theme_dark_secondaryContainer = Color(0xFF00522B)
 val md_theme_dark_onSecondaryContainer = Color(0xFF66FEA2)

@@ -32,6 +32,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -56,15 +57,14 @@ import androidx.navigation.NavController
 import com.lnavamuelp.historicalroots.R
 import com.lnavamuelp.historicalroots.database.HistoricPlace
 import com.lnavamuelp.historicalroots.ui.common.customComposableViews.CustomToolbar
-import com.lnavamuelp.historicalroots.ui.screens.NavigationRoutes
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HistoricalPlacesList(navController: NavController,openDrawer: () -> Unit) {
+
     val viewModel: HistoricalPlacesListViewModel = hiltViewModel()
-    //val historicPlacesList by viewModel.historicPlaceList.observeAsState(initial = listOf())
     val lazyListState = remember { LazyListState() }
 
     Scaffold(
@@ -72,7 +72,10 @@ fun HistoricalPlacesList(navController: NavController,openDrawer: () -> Unit) {
             CustomToolbar(title = stringResource(id = R.string.app_name), openDrawer)
         },
         content = {
-            val historicPlacesList by viewModel.historicPlaceList.observeAsState(initial = listOf())
+            LaunchedEffect(key1 = Unit) {
+                viewModel.getAllPlaces()
+           }
+            val historicPlacesList by viewModel.historicPlaceList.observeAsState(initial = emptyList())
             if (historicPlacesList.isNotEmpty()) {
                 Surface(color = Color.White, modifier = Modifier.fillMaxSize()) {
                     LazyColumn(
@@ -80,7 +83,7 @@ fun HistoricalPlacesList(navController: NavController,openDrawer: () -> Unit) {
                         state = lazyListState
                     ) {
                         items(items = historicPlacesList) { place ->
-                            PlaceCard(historicPlace = place, navController = navController)
+                            PlaceCard(historicPlace = place, placeId = place.placeId,navController = navController)
                         }
                     }
                 }
@@ -107,10 +110,26 @@ fun HistoricalPlacesList(navController: NavController,openDrawer: () -> Unit) {
         // how it should animate.
         floatingActionButton = {
             FloatingActionButton(
+                //onClick = {
+                //    val routeWithArgs = "ViewHistoricalPlaceDetail/$0/false"
+                //    //val routeWithArgs = "AddHistoricalPlaces?${NavigationRoutes.Authenticated.AddHistoricalPlaces.PLACE_ID}=$0&${NavigationRoutes.Authenticated.AddHistoricalPlaces.IS_EDIT}=false"
+                //    navController.navigate(routeWithArgs)
+                //}
                 onClick = {
-                    val routeWithArgs = "AddHistoricalPlaces?${NavigationRoutes.Authenticated.AddHistoricalPlaces.PLACE_ID}=$0&${NavigationRoutes.Authenticated.AddHistoricalPlaces.IS_EDIT}=false"
-                    navController.navigate(routeWithArgs)
-                }) {
+                    val currentBackStackEntry = navController.currentBackStackEntry
+                    val placeId = currentBackStackEntry?.arguments?.getString("placeId") ?: ""
+                    if (placeId.isNotEmpty()) {
+                        val route = "ViewHistoricalPlaceDetail/$placeId/false"
+                        navController.navigate(route)
+                    } else {
+                        // Handle the case where placeId is not provided
+                        //showToast("PlaceId not provided")
+                        // Navigate back or perform any other action
+                        navController.navigateUp()
+                    }
+                }
+            )
+            {
                 Row(
                     modifier = Modifier.padding(horizontal = 16.dp)
                 ) {
@@ -131,7 +150,6 @@ fun HistoricalPlacesList(navController: NavController,openDrawer: () -> Unit) {
         }
     )
 }
-
 /**
  * Returns whether the lazy list is currently scrolling up.
  */
@@ -152,44 +170,41 @@ private fun LazyListState.isScrollingUp(): Boolean {
         }
     }.value
 }
-
 @Composable
-fun PlaceCard(historicPlace: HistoricPlace, navController: NavController) {
+fun PlaceCard(historicPlace: HistoricPlace, placeId: Long, navController: NavController) {
     val expanded by remember { mutableStateOf(true) }
     Card(
         modifier = Modifier
             .padding(10.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable {
+                val routeWithArgs = "ViewHistoricalPlaceDetail/$placeId"
+               navController.navigate(routeWithArgs)
+            }
+            .animateContentSize(
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                    stiffness = Spring.StiffnessLow
+                )
+            ),
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+            containerColor = MaterialTheme.colorScheme.surface,
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 2.dp
         )
     ) {
         Column(
-            modifier = Modifier
-                .padding(20.dp)
-                .clickable {
-                    val routeWithArgs = "AddHistoricalPlaces?${NavigationRoutes.Authenticated.AddHistoricalPlaces.PLACE_ID}=$0&${NavigationRoutes.Authenticated.AddHistoricalPlaces.IS_EDIT}=false"
-                    navController.navigate(routeWithArgs)
-                }
-                .animateContentSize(
-                    animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioMediumBouncy,
-                        stiffness = Spring.StiffnessLow
-                    )
-                )
-        )
-         { // Fix: Remove extra parenthesis
+            modifier = Modifier.padding(20.dp)
+        ) {
             Row {
                 Image(
                     painter = painterResource(id = R.drawable.historic_place_icon),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     colorFilter = ColorFilter.tint(
-                        colorResource(id = R.color.purple_200),
+                        colorResource(id = R.color.white),
                     ),
                     modifier = Modifier
                         .size(50.dp)

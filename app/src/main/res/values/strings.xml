@@ -56,6 +56,10 @@
     <string name="category">Category / Classification</string>
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
+    <string name="contact_subject">Contact Subject</string>
+    <string name="contact_message">Contact Message</string>
+    <string name="drawer_home">Home</string>
+    <string name="drawer_home_description">Home</string>
 
 
 </resources>

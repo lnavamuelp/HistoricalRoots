@@ -1,6 +1,7 @@
 package com.lnavamuelp.historicalroots.ui.screens.historicalplaces
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
@@ -9,7 +10,6 @@ import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -58,6 +58,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.lnavamuelp.historicalroots.R
 import com.lnavamuelp.historicalroots.database.HistoricPlace
 import com.lnavamuelp.historicalroots.ui.common.customComposableViews.CustomToolbarWithBackArrow
@@ -76,22 +77,63 @@ var category: String=""
 var latitude: Double = 0.0
 var longitude: Double= 0.0
 
-data class FormField(
-    val labelResId: Int,
-    val inputWrapper: Any,
-    val keyboardOptions: KeyboardOptions,
-    val maxLength: Int,
-    val maxLines: Int
-)
-
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddEditHistoricalPlaceScreen(
     navController: NavController,
-    placeToEdit: String?,
+    placeId: String,
     isEdit: Boolean
 ) {
+
+
+
+    var isNameValid by remember { mutableStateOf(true) }
+    var isShortDescriptionValid by remember { mutableStateOf(true) }
+    var isLongDescriptionValid by remember { mutableStateOf(true) }
+    var isLocationValid by remember { mutableStateOf(true) }
+    var isCategoryValid by remember { mutableStateOf(true) }
+    var isLatitudeValid by remember { mutableStateOf(true) }
+    var isLongitudeValid by remember { mutableStateOf(true) }
+
+
+    fun validateName(name: String): Boolean {
+        // Example validation: Name should not be empty
+        return name.isNotBlank()
+    }
+
+    fun validateShortDescription(shortDescription: String): Boolean {
+        // Example validation: Short description should have at least 10 characters
+        return shortDescription.length >= 10
+    }
+
+    fun validateLongDescription(longDescription: String): Boolean {
+        // Example validation: Long description should have at least 20 characters
+        return longDescription.length >= 20
+    }
+
+    fun validateLocation(location: String): Boolean {
+        // Example validation: Location should not be empty
+        return location.isNotBlank()
+    }
+
+    fun validateCategory(category: String): Boolean {
+        // Example validation: Category should not be empty
+        return category.isNotBlank()
+    }
+
+    fun validateLatitude(latitude: Double): Boolean {
+        // Example validation: Latitude should be between -90 and 90
+        return latitude in -90.0..90.0
+    }
+
+    fun validateLongitude(longitude: Double): Boolean {
+        // Example validation: Longitude should be between -180 and 180
+        return longitude in -180.0..180.0
+    }
+
+
+
     lateinit var selectedPlace: HistoricPlace
     val mContext = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -108,9 +150,9 @@ fun AddEditHistoricalPlaceScreen(
 
     if (isEdit) {
         val historicalPlacesListViewModel: HistoricalPlacesListViewModel = hiltViewModel()
-        historicalPlacesListViewModel.findPlaceById(placeToEdit!!)
+        historicalPlacesListViewModel.findPlaceById(placeId.toLong())
         selectedPlace = historicalPlacesListViewModel.foundPlace.observeAsState().value!!
-        placeId = selectedPlace.placeId
+
         placeName = selectedPlace.name
         short_description = selectedPlace.short_description
         long_description = selectedPlace.long_description
@@ -131,108 +173,16 @@ fun AddEditHistoricalPlaceScreen(
         }
     }
 
-    val formFields = remember {
-        listOf(
-            FormField(
-                R.string.place_name,
-                placeName,
-                KeyboardOptions(
-                    capitalization = KeyboardCapitalization.None,
-                    autoCorrect = false,
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Next
-                ),
-                50,
-                1
-            ),
-            FormField(
-                R.string.short_description,
-                short_description,
-                KeyboardOptions(
-                    capitalization = KeyboardCapitalization.None,
-                    autoCorrect = false,
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Next
-                ),
-                100,
-                1
-            ),
-            FormField(
-                R.string.long_description,
-                long_description,
-                KeyboardOptions(
-                    capitalization = KeyboardCapitalization.None,
-                    autoCorrect = false,
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Next
-                ),
-                100,
-                1
-            ),
-            FormField(
-                R.string.image_url,
-                imageUrl,
-                KeyboardOptions(
-                    capitalization = KeyboardCapitalization.None,
-                    autoCorrect = false,
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Next
-                ),
-                100,
-                1
-            ),
-            FormField(
-                R.string.location,
-                location,
-                KeyboardOptions(
-                    capitalization = KeyboardCapitalization.None,
-                    autoCorrect = false,
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Next
-                ),
-                100,
-                1
-            ),
-            FormField(
-                R.string.category,
-                category,
-                KeyboardOptions(
-                    capitalization = KeyboardCapitalization.None,
-                    autoCorrect = false,
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Next
-                ),
-                100,
-                1
-            ),
-            FormField(
-                R.string.latitude,
-                latitude,
-                KeyboardOptions(
-                    capitalization = KeyboardCapitalization.None,
-                    autoCorrect = false,
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Next
-                ),
-                10,
-                1
-            ),
-            FormField(
-                R.string.longitude,
-                longitude,
-                KeyboardOptions(
-                    capitalization = KeyboardCapitalization.None,
-                    autoCorrect = false,
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Done
-                ),
-                10,
-                1
-            )
-
-        )
+    // Shows the validation message.
+    suspend fun showValidationMessageForField(isValid: Boolean) {
+        if (!isValid) {
+            // Show validation message for a short duration
+            // You can customize the duration and message as needed
+            validationMessageShown = true
+            delay(3000L)
+            validationMessageShown = false
+        }
     }
-
 
     val scrollState = rememberScrollState()
 
@@ -289,20 +239,152 @@ fun AddEditHistoricalPlaceScreen(
                     }
                     ValidationMessage(shown = validationMessageShown)
 
-                    formFields.forEach { field ->
-                        CustomTextField(
-                            modifier = Modifier
-                                .padding(all = 10.dp)
-                                .fillMaxWidth(),
-                            labelResId = field.labelResId,
-                            inputWrapper = field.inputWrapper.toString(),
-                            keyboardOptions = field.keyboardOptions,
-                            maxLength = field.maxLength,
-                            maxLines = field.maxLines
-                        ) {
-                            isEdited = true
-                            placeName = it
-                        }
+                    //Historical Place Name
+                    CustomTextField(
+                        modifier = Modifier
+                            .padding(all = 10.dp)
+                            .fillMaxWidth(),
+                        labelResId = R.string.place_name,
+                        inputWrapper = placeName,
+                        keyboardOptions = KeyboardOptions(
+                            capitalization = KeyboardCapitalization.None,
+                            autoCorrect = false,
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Next
+                        ),
+                        maxLength = 50,
+                        maxLines = 1
+                    ) {
+                        isEdited = true
+                        placeName = it
+                        isNameValid = validateName(it)
+
+                    }
+
+                    //Historical Place Short Description
+                    CustomTextField(
+                        modifier = Modifier
+                            .padding(all = 10.dp)
+                            .fillMaxWidth(),
+                        labelResId = R.string.short_description,
+                        inputWrapper = short_description,
+                        keyboardOptions = KeyboardOptions(
+                            capitalization = KeyboardCapitalization.None,
+                            autoCorrect = false,
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Next
+                        ),
+                        maxLength = 100,
+                        maxLines = 5
+                    ) {
+                        isEdited = true
+                        short_description = it
+                        isShortDescriptionValid = validateShortDescription(it)
+                    }
+
+                    //Historical Place Long Description
+                    CustomTextField(
+                        modifier = Modifier
+                            .padding(all = 10.dp)
+                            .fillMaxWidth(),
+                        labelResId = R.string.long_description,
+                        inputWrapper = long_description,
+                        keyboardOptions = KeyboardOptions(
+                            capitalization = KeyboardCapitalization.None,
+                            autoCorrect = false,
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Next
+                        ),
+                        maxLength = 300,
+                        maxLines = 10
+                    ) {
+                        isEdited = true
+                        long_description = it
+                        isLongDescriptionValid = validateLongDescription(it)
+                    }
+
+                    //Historical Place Location
+                    CustomTextField(
+                        modifier = Modifier
+                            .padding(all = 10.dp)
+                            .fillMaxWidth(),
+                        labelResId = R.string.location,
+                        inputWrapper = location,
+                        keyboardOptions = KeyboardOptions(
+                            capitalization = KeyboardCapitalization.None,
+                            autoCorrect = false,
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Next
+                        ),
+                        maxLength = 50,
+                        maxLines = 1
+                    ) {
+                        isEdited = true
+                        location = it
+                        isLocationValid = validateLocation(it)
+                    }
+
+                    //Historical Place Category
+                    CustomTextField(
+                        modifier = Modifier
+                            .padding(all = 10.dp)
+                            .fillMaxWidth(),
+                        labelResId = R.string.category,
+                        inputWrapper = category,
+                        keyboardOptions = KeyboardOptions(
+                            capitalization = KeyboardCapitalization.None,
+                            autoCorrect = false,
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Next
+                        ),
+                        maxLength = 50,
+                        maxLines = 1
+                    ) {
+                        isEdited = true
+                        category = it
+                        isCategoryValid = validateCategory(it)
+                    }
+
+                    //Historical Place Latitude
+                    CustomTextField(
+                        modifier = Modifier
+                            .padding(all = 10.dp)
+                            .fillMaxWidth(),
+                        labelResId = R.string.latitude,
+                        inputWrapper = latitude.toString(),
+                        keyboardOptions = KeyboardOptions(
+                            capitalization = KeyboardCapitalization.None,
+                            autoCorrect = false,
+                            keyboardType = KeyboardType.Number,
+                            imeAction = ImeAction.Next
+                        ),
+                        maxLength = 50,
+                        maxLines = 1
+                    ) {
+                        isEdited = true
+                        latitude = it.toDouble()
+                        isLatitudeValid = validateLatitude(it.toDouble())
+                    }
+
+                    //Historical Place Longitude
+                    CustomTextField(
+                        modifier = Modifier
+                            .padding(all = 10.dp)
+                            .fillMaxWidth(),
+                        labelResId = R.string.longitude,
+                        inputWrapper = longitude.toString(),
+                        keyboardOptions = KeyboardOptions(
+                            capitalization = KeyboardCapitalization.None,
+                            autoCorrect = false,
+                            keyboardType = KeyboardType.Number,
+                            imeAction = ImeAction.Next
+                        ),
+                        maxLength = 50,
+                        maxLines = 1
+                    ) {
+                        isEdited = true
+                        longitude = it.toDouble()
+                        isLongitudeValid = validateLongitude(it.toDouble())
                     }
 
                     Spacer(modifier = Modifier.height(20.dp))
@@ -310,13 +392,54 @@ fun AddEditHistoricalPlaceScreen(
                     Button(onClick = {
                         //Log.d("AddEditHistoricalPlace", "Button clicked")
                         if (isEdited) {
-                            val historicPlace = createHistoricPlaceFromFormFields(formFields)
+                            if (isNameValid && isShortDescriptionValid && isLongDescriptionValid) {
+                                val historicPlace = HistoricPlace(
+                                placeId = if (isEdit) selectedPlace.placeId else 0,
+                                name = placeName,
+                                short_description = short_description,
+                                long_description = long_description,
+                                imageUrl = imageUrl,
+                                location = location,
+                                category = category,
+                                latitude = latitude,
+                                longitude = longitude
+                            )
                             if (isEdit) {
-                                historicalPlacesListViewModel.updateHistoricPlace(historicPlace)
+                                updatePlaceInDB(
+                                    mContext,
+                                    navController as NavHostController,
+                                    historicPlace,
+                                    historicalPlacesListViewModel
+                                )
                             } else {
-                                historicalPlacesListViewModel.addHistoricPlace(historicPlace)
+                                addPlaceInDB(
+                                    mContext,
+                                    navController as NavHostController,
+                                    historicPlace,
+                                    historicalPlacesListViewModel
+                                )
                             }
                             clearAll()
+                            } else {
+                                coroutineScope.launch {
+                                    // Show validation message for the field that failed validation
+                                    if (!isNameValid) {
+                                        showValidationMessageForField(isNameValid)
+                                    } else if (!isShortDescriptionValid) {
+                                        showValidationMessageForField(isShortDescriptionValid)
+                                    } else if (!isLongDescriptionValid) {
+                                        showValidationMessageForField(isLongDescriptionValid)
+                                    } else if (!isLocationValid) {
+                                        showValidationMessageForField(isLocationValid)
+                                    } else if (!isCategoryValid) {
+                                        showValidationMessageForField(isCategoryValid)
+                                    } else if (!isLatitudeValid) {
+                                        showValidationMessageForField(isLatitudeValid)
+                                    } else if (!isLongitudeValid) {
+                                        showValidationMessageForField(isLongitudeValid)
+                                    }
+                                }
+                            }
                         } else {
                             coroutineScope.launch {
                                 showEditMessage()
@@ -340,7 +463,6 @@ fun AddEditHistoricalPlaceScreen(
  * Shows a validation message.
  */
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun ValidationMessage(shown: Boolean) {
     AnimatedVisibility(
@@ -368,20 +490,6 @@ private fun ValidationMessage(shown: Boolean) {
     }
 }
 
-private fun createHistoricPlaceFromFormFields(formFields: List<FormField>): HistoricPlace {
-    // Create HistoricPlace object from form field data
-    return HistoricPlace(
-        placeId = placeId,
-        name = placeName,
-        short_description = short_description,
-        long_description = long_description,
-        imageUrl = imageUrl,
-        location = location,
-        category = category,
-        latitude = latitude,
-        longitude = longitude
-    )
-}
 
 fun clearAll() {
     placeId = 0
@@ -393,4 +501,25 @@ fun clearAll() {
     category=""
     latitude = 0.0
     longitude= 0.0
+}
+
+
+fun addPlaceInDB(
+    context: Context,
+    navController: NavHostController,
+    historicPlace: HistoricPlace,
+    historicalPlacesListViewModel: HistoricalPlacesListViewModel
+) {
+    historicalPlacesListViewModel.addHistoricPlace(historicPlace)
+    navController.popBackStack()
+}
+
+fun updatePlaceInDB(
+    context: Context,
+    navController: NavHostController,
+    historicPlace: HistoricPlace,
+    historicalPlacesListViewModel: HistoricalPlacesListViewModel
+) {
+    historicalPlacesListViewModel.updateHistoricPlace(historicPlace)
+    navController.popBackStack()
 }

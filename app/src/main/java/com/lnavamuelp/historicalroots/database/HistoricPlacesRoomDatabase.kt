@@ -9,13 +9,13 @@ import androidx.room.RoomDatabase
 @Database(entities = [(HistoricPlace::class)], version = 1, exportSchema = false)
 abstract class HistoricPlacesRoomDatabase : RoomDatabase() {
 
+
     abstract fun historicPlaceDao(): HistoricPlaceDao
 
     companion object {
 
         @Volatile
         private var INSTANCE: HistoricPlacesRoomDatabase? = null
-
 
         fun getInstance(context: Context): HistoricPlacesRoomDatabase {
             synchronized(this) {
@@ -26,9 +26,7 @@ abstract class HistoricPlacesRoomDatabase : RoomDatabase() {
                         context.applicationContext,
                         HistoricPlacesRoomDatabase::class.java,
                         "historicroots_database"
-                    )
-                        .allowMainThreadQueries()
-                        .fallbackToDestructiveMigration()
+                    ).fallbackToDestructiveMigration()
                         .build()
 
                     INSTANCE = instance
@@ -36,5 +34,7 @@ abstract class HistoricPlacesRoomDatabase : RoomDatabase() {
                 return instance
             }
         }
+
     }
 }
+

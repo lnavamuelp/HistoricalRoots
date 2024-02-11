@@ -14,8 +14,8 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideEmployeeRepository(HistoricPlaceDao: HistoricPlaceDao): HistoricPlacesRepository {
-        return HistoricPlacesRepository(HistoricPlaceDao)
+    fun provideHistoricPlaceRepository(historicPlaceDao:HistoricPlaceDao): HistoricPlacesRepository {
+        return HistoricPlacesRepository(historicPlaceDao)
     }
 
 }

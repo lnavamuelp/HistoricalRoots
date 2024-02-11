@@ -39,7 +39,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.lnavamuelp.historicalroots.R
 import com.lnavamuelp.historicalroots.database.HistoricPlace
 import com.lnavamuelp.historicalroots.ui.common.customComposableViews.CustomToolbarWithBackArrow
@@ -49,14 +50,15 @@ import com.lnavamuelp.historicalroots.ui.screens.NavigationRoutes
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @ExperimentalMaterial3Api
 @Composable
-fun HistoricalPlaceDetailScreen(
-    navController: NavHostController,
-    historicalPlacesListViewModel: HistoricalPlacesListViewModel,
+fun ViewHistoricalPlaceDetail(
+    navController: NavController,
     placeId: String?
 ) {
 
-    historicalPlacesListViewModel.findPlaceById(placeId!!)
-    val selectedPlace = historicalPlacesListViewModel.foundPlace.observeAsState().value
+    val viewModel: HistoricalPlacesListViewModel = hiltViewModel()
+    viewModel.findPlaceById(placeId?.toLong() ?: 0L)
+
+    val selectedPlace = viewModel.foundPlace.observeAsState().value
     val showDialog = remember { mutableStateOf(false) }
 
     Scaffold(
@@ -121,19 +123,19 @@ fun HistoricalPlaceDetailScreen(
                             fontWeight = FontWeight.SemiBold,
                         )
                         Spacer(modifier = Modifier.weight(1f))
-                        Row() {
+                        Row {
                             if (showDialog.value) {
-                                Alert(navController,
-                                    historicalPlacesListViewModel,
-                                    selectedPlace,
+                                Alert(
+                                    navController = navController,
+                                    viewModel = viewModel,
+                                    selectedPlace = selectedPlace,
                                     name = "Are you sure you want to delete the place?",
-                                    showDialog = showDialog.value,
-                                    onDismiss = { showDialog.value = false })
+                                    showDialog = showDialog.value
+                                ) { showDialog.value = false }
                             }
                             Button(
                                 onClick = {
                                     showDialog.value = true
-
                                 },
                                 modifier = Modifier
                                     .weight(1f)
@@ -146,12 +148,14 @@ fun HistoricalPlaceDetailScreen(
                             Spacer(modifier = Modifier.width(10.dp))
                             Button(
                                 onClick = {
-                                    navController.navigate(NavigationRoutes.Authenticated.AddHistoricalPlaces.route + "/" + selectedPlace.placeId + "/" + true)
+                                    // Navigate to the screen where the user can update the place details
+                                    val placeId = selectedPlace?.placeId ?: ""
+                                    val isEdit = true
+                                    navController.navigate("${NavigationRoutes.Authenticated.AddHistoricalPlaces.route}/$placeId/$isEdit")
                                 },
-                                modifier = Modifier
-                                    .weight(1f)
+                                modifier = Modifier.weight(1f)
                             ) {
-                                Text(text = "Update Details", fontSize = 16.sp)
+                                Text(text = "Update Place Details", fontSize = 16.sp)
                             }
                         }
                     }
@@ -164,8 +168,8 @@ fun HistoricalPlaceDetailScreen(
 
 @Composable
 fun Alert(
-    navController: NavHostController,
-    historicalPlacesListViewModel: HistoricalPlacesListViewModel,
+    navController: NavController,
+    viewModel: HistoricalPlacesListViewModel,
     selectedPlace: HistoricPlace,
     name: String,
     showDialog: Boolean,
@@ -174,7 +178,7 @@ fun Alert(
     if (showDialog) {
         AlertDialog(
             title = {
-                Text("Delete Employee", style = MaterialTheme.typography.bodySmall)
+                Text("Delete Historic Place", style = MaterialTheme.typography.bodySmall)
             },
             text = {
                 Text(text = name)
@@ -182,15 +186,15 @@ fun Alert(
             onDismissRequest = onDismiss,
             confirmButton = {
                 TextButton(onClick = {
-                    historicalPlacesListViewModel.deletePlaceDetails(selectedPlace)
+                    viewModel.deleteHistoricPlaceDetails(selectedPlace)
                     navController.popBackStack()
                 }) {
-                    Text("DELETE")
+                    Text("Delete Place")
                 }
             },
             dismissButton = {
                 TextButton(onClick = onDismiss) {
-                    Text("CANCEL")
+                    Text("Cancel Delete")
                 }
             }
         )

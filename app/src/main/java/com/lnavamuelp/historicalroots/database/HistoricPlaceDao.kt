@@ -14,14 +14,14 @@ interface HistoricPlaceDao {
         suspend fun addHistoricPlace(historicPlace: HistoricPlace)
 
         @Query("SELECT * FROM historicplaces WHERE id = :placeId")
-        fun findPlaceById(placeId: Long): HistoricPlace
+        suspend fun findPlaceById(placeId: Long): HistoricPlace? // Update return type to HistoricPlace?
 
         @Query("SELECT * FROM historicplaces")
-        fun getAllPlaces(): List<HistoricPlace>
+        suspend fun getAllPlaces(): List<HistoricPlace>
 
         @Update
         suspend fun updateHistoricPlace(historicPlace: HistoricPlace)
 
         @Delete
         suspend fun deletePlace(historicPlace: HistoricPlace)
-    }
+}

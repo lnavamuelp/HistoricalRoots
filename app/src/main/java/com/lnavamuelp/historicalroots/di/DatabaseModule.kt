@@ -18,6 +18,11 @@ object DatabaseModule {
 
     @Provides
     @Singleton
+    fun provideHistoricPlaceDao(appDatabase: HistoricPlacesRoomDatabase): HistoricPlaceDao {
+        return appDatabase.historicPlaceDao()
+    }
+    @Provides
+    @Singleton
     fun provideAppDatabase(@ApplicationContext context: Context): HistoricPlacesRoomDatabase {
         return Room.databaseBuilder(
             context.applicationContext,
@@ -26,10 +31,6 @@ object DatabaseModule {
         ).build()
     }
 
-    @Provides
-    @Singleton
-    fun provideHistoricPlaceDao(appDatabase: HistoricPlacesRoomDatabase): HistoricPlaceDao {
-        return appDatabase.historicPlaceDao()
-    }
+
 
 }
