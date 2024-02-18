@@ -186,6 +186,7 @@ fun AddEditHistoricalPlaceScreen(
 
     val scrollState = rememberScrollState()
 
+
     var isEdited by remember { mutableStateOf(false) }
     Scaffold(
         topBar = {
@@ -205,11 +206,11 @@ fun AddEditHistoricalPlaceScreen(
                         .verticalScroll(state = scrollState),
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.ic_launcher_background),
+                        painter = painterResource(id = R.drawable.jetpack_compose_logo),
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
                         colorFilter = ColorFilter.tint(
-                            colorResource(id = R.color.purple_200),
+                            colorResource(id = R.color.teal_200),
                         ),
                         modifier = Modifier
                             .clickable { galleryLauncher.launch("image/*") }

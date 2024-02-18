@@ -1,6 +1,7 @@
 package com.lnavamuelp.historicalroots.ui.screens.historicalplaces
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
@@ -110,23 +111,9 @@ fun HistoricalPlacesList(navController: NavController,openDrawer: () -> Unit) {
         // how it should animate.
         floatingActionButton = {
             FloatingActionButton(
-                //onClick = {
-                //    val routeWithArgs = "ViewHistoricalPlaceDetail/$0/false"
-                //    //val routeWithArgs = "AddHistoricalPlaces?${NavigationRoutes.Authenticated.AddHistoricalPlaces.PLACE_ID}=$0&${NavigationRoutes.Authenticated.AddHistoricalPlaces.IS_EDIT}=false"
-                //    navController.navigate(routeWithArgs)
-                //}
                 onClick = {
-                    val currentBackStackEntry = navController.currentBackStackEntry
-                    val placeId = currentBackStackEntry?.arguments?.getString("placeId") ?: ""
-                    if (placeId.isNotEmpty()) {
-                        val route = "ViewHistoricalPlaceDetail/$placeId/false"
-                        navController.navigate(route)
-                    } else {
-                        // Handle the case where placeId is not provided
-                        //showToast("PlaceId not provided")
-                        // Navigate back or perform any other action
-                        navController.navigateUp()
-                    }
+                    val routeWithArgs = "AddHistoricalPlaces/$0/false"
+                    navController.navigate(routeWithArgs)
                 }
             )
             {
@@ -178,8 +165,9 @@ fun PlaceCard(historicPlace: HistoricPlace, placeId: Long, navController: NavCon
             .padding(10.dp)
             .fillMaxWidth()
             .clickable {
+                Log.d("PlaceCard", "PlaceCard: $placeId")
                 val routeWithArgs = "ViewHistoricalPlaceDetail/$placeId"
-               navController.navigate(routeWithArgs)
+                navController.navigate(routeWithArgs)
             }
             .animateContentSize(
                 animationSpec = spring(

@@ -45,7 +45,7 @@
 
     <!--Historical Places List-->
     <string name="historical_places_list_welcome">This is the historical Places List</string>
-    <string name="back">Back</string>
+    <string name="back">Atras</string>
     <string name="place_name">Historical Place Name</string>
     <string name="place_id">Historical Place Id</string>
     <string name="add_historic_place">Add New Historic Place</string>

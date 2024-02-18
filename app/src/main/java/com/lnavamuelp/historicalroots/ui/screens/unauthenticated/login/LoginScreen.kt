@@ -18,7 +18,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -31,6 +33,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.size.Scale
 import com.lnavamuelp.historicalroots.R
+import com.lnavamuelp.historicalroots.di.UserPreferences
 import com.lnavamuelp.historicalroots.ui.common.customComposableViews.MediumTitleText
 import com.lnavamuelp.historicalroots.ui.common.customComposableViews.TitleText
 import com.lnavamuelp.historicalroots.ui.screens.unauthenticated.login.state.LoginUiEvent
@@ -50,16 +53,26 @@ fun LoginScreen(
         loginViewModel.loginState
     }
 
+    var rememberCredentials by remember { mutableStateOf(false) }
+    var username by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+
+    // Obtener las credenciales guardadas si el usuario eligió recordarlas
+    if (rememberCredentials) {
+        username = UserPreferences.getSavedUsername(LocalContext.current) ?: ""
+        password = UserPreferences.getSavedPassword(LocalContext.current) ?: ""
+    }
+
     if (loginState.isLoginSuccessful) {
-        /**
-         * Navigate to Authenticated navigation route
-         * once login is successful
-         */
+        if (rememberCredentials) {
+            val username = loginState.emailOrMobile
+            val password = loginState.password
+            UserPreferences.saveCredentials(LocalContext.current, username, password)
+        }
         LaunchedEffect(key1 = true) {
             onNavigateToAuthenticatedRoute.invoke()
         }
     } else {
-
         // Full Screen Content
         Column(
             modifier = Modifier
@@ -134,6 +147,18 @@ fun LoginScreen(
                         onForgotPasswordClick = onNavigateToForgotPassword
                     )
 
+                    // Remember Credentials Checkbox
+                    Row(
+                        modifier = Modifier.padding(top = AppTheme.dimens.paddingNormal),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        androidx.compose.material3.Checkbox(
+                            checked = rememberCredentials,
+                            onCheckedChange = { rememberCredentials = it }
+                        )
+                        Text(text = "Remember credentials")
+                    }
                 }
             }
 
@@ -158,10 +183,9 @@ fun LoginScreen(
                 )
             }
         }
-
     }
-
 }
+
 
 @Preview(showBackground = true)
 @Composable

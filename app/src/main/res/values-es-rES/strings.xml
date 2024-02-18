@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Historical Roots</string>
+    <string name="jetpack_compose">Acepta tu historia</string>
+    <string name="navigate_back">Volver atras</string>
+    <string name="login_heading_text">Acceso</string>
+    <string name="login_email_id_or_phone_label">Correo Electronico</string>
+    <string name="login_password_label">Contraseña</string>
+    <string name="login_button_text">Acceder</string>
+    <string name="forgot_password">¿Has olvidado la contraseña?</string>
+    <string name="icon_password_visible">Ver Contraseña</string>
+    <string name="icon_password_hidden">Ocultar Contraseña</string>
+    <string name="login_error_msg_empty_email_mobile">Introduce tu correo electronico</string>
+    <string name="login_error_msg_empty_password">Introduce una contraseña</string>
+    <string name="do_not_have_account">¿No tienes cuenta?</string>
+    <string name="register">Registrate</string>
+    <string name="registration_heading_text">Crear Cuenta</string>
+    <string name="registration_email_label">Correo Electronico</string>
+    <string name="registration_mobile_label">Telefono Movil</string>
+    <string name="registration_password_label">Contraseña</string>
+    <string name="registration_confirm_password_label">Confirmar Contraseña</string>
+    <string name="registration_button_text">Registrarse</string>
+    <string name="back_to_login">Volver Login</string>
+    <string name="registration_error_msg_empty_email">Campo Email vacio</string>
+    <string name="registration_error_msg_empty_mobile">Campo Movil Vacio</string>
+    <string name="registration_error_msg_empty_password">Campo contraseña vacio</string>
+    <string name="registration_error_msg_empty_confirm_password">Confirma tu contraseña</string>
+    <string name="registration_error_msg_password_mismatch">Las contraseñas no coinciden</string>
+    <string name="dashboard_title_welcome_user">Bienvenido,</string>
+    <string name="historical_places_list_welcome">Listado Lugares Historicos</string>
+    <string name="back">Atras</string>
+    <string name="place_name">Nombre Lugar</string>
+    <string name="add_historic_place">Agregar Lugar Historico</string>
+    <string name="short_description">Descripcion Corta</string>
+    <string name="long_description">Descripcion Larga</string>
+    <string name="image_url">Imagen</string>
+    <string name="location">Localizacion</string>
+    <string name="category">Categoria</string>
+    <string name="latitude">Latitud</string>
+    <string name="longitude">Longitud</string>
+    <string name="contact_subject">Persona Contacto</string>
+    <string name="contact_message">Mensaje</string>
+    <string name="drawer_home">Inicio</string>
+    <string name="drawer_home_description">Inicio</string>
+</resources>
