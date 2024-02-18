@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
-import com.lnavamuelp.historicalroots.ui.common.customComposableViews.CustomToolbar
+import com.lnavamuelp.historicalroots.ui.common.customComposableViews.CustomToolbarWithBackArrow
 import com.lnavamuelp.historicalroots.ui.theme.CustomTextField
 
 
@@ -37,8 +37,7 @@ import com.lnavamuelp.historicalroots.ui.theme.CustomTextField
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ContactUsScreen(
-    navController: NavController,
-    openDrawer: () -> Unit
+    navController: NavController
 ) {
     val context = LocalContext.current
     var userMessage: String = ""
@@ -46,7 +45,7 @@ fun ContactUsScreen(
 
     Scaffold(
         topBar = {
-            CustomToolbar(title = "Raise a Concern", openDrawer)
+            CustomToolbarWithBackArrow(title = "Send a message", navController = navController)
         },
         content = {
             Surface(

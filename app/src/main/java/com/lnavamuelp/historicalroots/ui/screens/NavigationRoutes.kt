@@ -8,6 +8,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Mail
 import androidx.compose.material.icons.filled.People
 import androidx.compose.material.icons.filled.RemoveRedEye
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.TempleBuddhist
 import androidx.compose.material.icons.filled.VerifiedUser
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -31,6 +32,8 @@ sealed class NavigationRoutes {
         object HistoricalPlacesList : Authenticated("Historical Places List", "HistoricalPlacesList", Icons.Default.TempleBuddhist)
         object AboutUs : Authenticated("About Us", "AboutUs", Icons.Default.People)
         object Contact : Authenticated("Contact Us", "Contact", Icons.Default.Mail)
+        object Settings : Authenticated("Settings", "Settings", Icons.Default.Settings)
+
         object AddHistoricalPlaces : Authenticated(
             "Add / Edit Places",
             "AddHistoricalPlaces",

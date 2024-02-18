@@ -54,7 +54,6 @@ fun ViewHistoricalPlaceDetail(
     navController: NavController,
     placeId: String?
 ) {
-
     val viewModel: HistoricalPlacesListViewModel = hiltViewModel()
     viewModel.findPlaceById(placeId?.toLong() ?: 0L)
 
@@ -155,7 +154,7 @@ fun ViewHistoricalPlaceDetail(
                                 },
                                 modifier = Modifier.weight(1f)
                             ) {
-                                Text(text = "Update Place Details", fontSize = 16.sp)
+                                Text(text = "Update Place", fontSize = 16.sp)
                             }
                         }
                     }

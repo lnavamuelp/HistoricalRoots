@@ -1,7 +1,5 @@
 package com.lnavamuelp.historicalroots.ui.common.customComposableViews
 
-import android.content.Context
-import android.widget.Toast
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
@@ -28,7 +26,7 @@ fun CustomToolbarWithBackArrow(title: String, navController: NavController) {
                 Icon(
                     Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = stringResource(id = R.string.back),
-                    tint = Color.White
+                    tint = Color.Black
                 )
             }
         }
@@ -37,17 +35,13 @@ fun CustomToolbarWithBackArrow(title: String, navController: NavController) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CustomToolbar(title: String,onButtonClicked: () -> Unit) {
+fun CustomToolbar(title: String,openDrawer: () -> Unit) {
     TopAppBar(
         title = { Text(text = title, style = MaterialTheme.typography.headlineLarge) },
         navigationIcon = {
-            IconButton(onClick = { onButtonClicked() } ) {
+            IconButton(onClick = { openDrawer() } ) {
                 Icon(Icons.Default.Menu, contentDescription = "navigation drawer")
             }
         },
     )
-}
-
-fun toast(context: Context, message: String) {
-    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 }

@@ -7,10 +7,12 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
+import com.lnavamuelp.historicalroots.ui.screens.about.AlertDialog
 import com.lnavamuelp.historicalroots.ui.screens.contact.ContactUsScreen
 import com.lnavamuelp.historicalroots.ui.screens.historicalplaces.AddEditHistoricalPlaceScreen
 import com.lnavamuelp.historicalroots.ui.screens.historicalplaces.HistoricalPlacesList
 import com.lnavamuelp.historicalroots.ui.screens.historicalplaces.ViewHistoricalPlaceDetail
+import com.lnavamuelp.historicalroots.ui.screens.settings.PreferencesScreen
 import com.lnavamuelp.historicalroots.ui.screens.unauthenticated.login.LoginScreen
 import com.lnavamuelp.historicalroots.ui.screens.unauthenticated.registration.RegistrationScreen
 
@@ -77,16 +79,6 @@ fun NavGraphBuilder.authenticatedGraph(
         }
 
         //Add Historical Places List
-        /*composable(route = NavigationRoutes.Authenticated.AddHistoricalPlaces.route) {
-                navBackStackEntry ->
-            val placeId = navBackStackEntry.arguments?.getString("placeId") ?: "0"
-            val isEdit = navBackStackEntry.arguments?.getBoolean("isEdit") ?: false
-            AddEditHistoricalPlaceScreen(
-                navController = navController,
-                placeId = placeId,
-                isEdit = isEdit
-            )
-        }*/
         composable(
             route = "${NavigationRoutes.Authenticated.AddHistoricalPlaces.route}/{placeId}/{isEdit}",
             arguments = listOf(
@@ -122,7 +114,21 @@ fun NavGraphBuilder.authenticatedGraph(
 
         //Contact Us
         composable(route = NavigationRoutes.Authenticated.Contact.route) {
-            ContactUsScreen(navController =navController) {}
+            ContactUsScreen(navController =navController)
         }
+
+        //About Us
+        composable(route = NavigationRoutes.Authenticated.AboutUs.route) {
+            AlertDialog(navController =navController)
+            //AboutUsScreen(navController =navController)
+        }
+
+        //Settings
+        composable(route = NavigationRoutes.Authenticated.Settings.route) {
+            PreferencesScreen(navController =navController)
+        }
+
+
     }
 }
+

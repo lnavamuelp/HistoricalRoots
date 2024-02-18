@@ -57,6 +57,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.lnavamuelp.historicalroots.R
 import com.lnavamuelp.historicalroots.database.HistoricPlace
+import com.lnavamuelp.historicalroots.ui.common.customComposableViews.BottomAppBarWithNavigation
 import com.lnavamuelp.historicalroots.ui.common.customComposableViews.CustomToolbar
 
 
@@ -70,7 +71,10 @@ fun HistoricalPlacesList(navController: NavController,openDrawer: () -> Unit) {
 
     Scaffold(
         topBar = {
-            CustomToolbar(title = stringResource(id = R.string.app_name), openDrawer)
+            CustomToolbar(title = stringResource(id = R.string.app_name),openDrawer=openDrawer)
+        },
+        bottomBar = {
+            BottomAppBarWithNavigation(navController = navController)
         },
         content = {
             LaunchedEffect(key1 = Unit) {

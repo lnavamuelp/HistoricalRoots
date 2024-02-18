@@ -14,25 +14,33 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.lnavamuelp.historicalroots.ui.screens.Drawer
+import com.lnavamuelp.historicalroots.di.LocaleUtils
+import com.lnavamuelp.historicalroots.ui.common.customComposableViews.Drawer
 import com.lnavamuelp.historicalroots.ui.screens.NavigationRoutes
 import com.lnavamuelp.historicalroots.ui.screens.authenticatedGraph
 import com.lnavamuelp.historicalroots.ui.screens.unauthenticatedGraph
 import com.lnavamuelp.historicalroots.ui.theme.HistoricalRootsTheme
 import dagger.hilt.android.AndroidEntryPoint
 
-
 @AndroidEntryPoint
 class MainActivity: ComponentActivity() {
 
  //   private val historicalPlacesListViewModel: HistoricalPlacesListViewModel by viewModels()
 
+   //val language = UserPreferences.getLanguage(applicationContext)
+    //val themeColor = UserPreferences.getThemeColor(applicationContext)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+
+            val context = LocalContext.current
+            LocaleUtils.setLocale(context)
+
             HistoricalRootsTheme {
                 MainApp()
             }
@@ -44,12 +52,13 @@ class MainActivity: ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainApp() {
+
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
         val navController = rememberNavController()
-        //MainAppNavHost(navController = navController,historicalPlacesListViewModel = historicalPlacesListViewModel)
         MainAppNavHost(navController = navController)
 
     }
@@ -90,4 +99,3 @@ fun MainAppNavHost(
         }
     }
 }
-

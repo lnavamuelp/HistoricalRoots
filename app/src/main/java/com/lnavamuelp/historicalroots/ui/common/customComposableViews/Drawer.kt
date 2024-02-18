@@ -1,4 +1,4 @@
-package com.lnavamuelp.historicalroots.ui.screens
+package com.lnavamuelp.historicalroots.ui.common.customComposableViews
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -29,6 +29,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.lnavamuelp.historicalroots.R
+import com.lnavamuelp.historicalroots.ui.screens.NavigationRoutes
 
 
 private val screens = listOf(
