@@ -5,12 +5,16 @@ This Android application showcases historical places using Jetpack Compose. It p
 
 ### Features
 
-1. Login with simple empty validations
+1. Login with simple empty validations and saving user credentials.
 2. Registration with simple empty validations
 3. Usage of icon and password toggle
 4. View a list of historical places.
 5. View details of each historical place.
 6. Add new and Edit previous historical places.
+7. Change User preferences about language, color theme.
+8. Bottom bar with Dialog about app.
+9. Contact us screen to send email with default email application.
+10. Load images from local library to Places creation.
 
 
 ## Data Source
